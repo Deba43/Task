@@ -23,25 +23,25 @@ public class Task {
     private String description;
 
     private String location;
-    
+
     @Enumerated(EnumType.STRING)
     private Status status; // Enum for pending, in progress, completed
 
     @Enumerated(EnumType.STRING)
     private Priority priority; // Enum for low, medium, high
-    
+
     @Enumerated(EnumType.STRING)
     private Category category; // Enum for education, health, environment
 
     private LocalDate eventDate;
 
-    private LocalDateTime createdAt;
-    
-    private LocalDateTime endAt;
+    private LocalDate createdAt;
 
-    private LocalDateTime updatedAt;
-    
-    @ManyToOne
-    @JoinColumn(name = "org_id")
-    private Organization org;
+    private LocalDate endAt;
+
+    private LocalDate updatedAt;
+
+    // @ManyToOne
+    // @JoinColumn(name = "org_id")
+    // private Organization org;
 }

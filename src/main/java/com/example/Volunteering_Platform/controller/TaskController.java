@@ -21,40 +21,21 @@ import com.example.Volunteering_Platform.service.OrganizationService;
 import com.example.Volunteering_Platform.service.TaskService;
 
 @RestController
-@RequestMapping("/tasks")
+// @RequestMapping("/tasks")
 public class TaskController {
 
     @Autowired
     private TaskService taskService;
-    @Autowired
-    private OrganizationService organizationService;
 
-    @PostMapping("/addTaskOrganization/{organizationId}")
-    public ResponseEntity<Task> addTaskOrganization(
-            @PathVariable Long organizationId,
-            @RequestBody Task task) {
-
-        Optional<Organization> org = organizationService.findOrganizationById(organizationId);
-        if (org.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
+    @PostMapping("/addTask")
+    public ResponseEntity<Task> addTask(@RequestBody Task task) {
         if (task.getEndAt() != null && task.getEventDate() != null) {
-            LocalDateTime eventDateTime = task.getEventDate().atStartOfDay();
-
-            if (task.getEndAt().isBefore(eventDateTime)) {
+            if (task.getEndAt().isBefore(task.getEventDate())) { // Compare directly
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            if (task.getEndAt().isBefore(eventDateTime)) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-
         }
 
         try {
-            Organization organization = org.get();
-            task.setOrg(organization);
-
             Task savedTask = taskService.saveTask(task);
             return new ResponseEntity<>(savedTask, HttpStatus.CREATED);
         } catch (Exception e) {
