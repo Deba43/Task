@@ -1,9 +1,8 @@
 package com.example.Volunteering_Platform.controller;
 
-import java.time.LocalDateTime;
+
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,13 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.Volunteering_Platform.model.Organization;
+
 import com.example.Volunteering_Platform.model.Task;
-import com.example.Volunteering_Platform.service.OrganizationService;
 import com.example.Volunteering_Platform.service.TaskService;
 
 @RestController
-// @RequestMapping("/tasks")
+@RequestMapping("/tasks")
 public class TaskController {
 
     @Autowired
@@ -64,5 +62,36 @@ public class TaskController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/getTaskByName/{title}")
+    public ResponseEntity<Task> getTaskByName(@PathVariable String title) {
+        Task task = taskService.getTaskByName(title).orElse(null);
+        if (task != null) {
+            return new ResponseEntity<>(task, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/getTaskByLocation/{location}")
+    public ResponseEntity<Task> getTaskByLocation(@PathVariable String location) {
+        Task task = taskService.getTaskByLocation(location).orElse(null);
+        if (task != null) {
+            return new ResponseEntity<>(task, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/getTaskByCategory/{category}")
+    public ResponseEntity<Task> getTaskByCategory(@PathVariable String category) {
+        Task task = taskService.getTaskByCategory(category).orElse(null);
+        if (task != null) {
+            return new ResponseEntity<>(task, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 
 }

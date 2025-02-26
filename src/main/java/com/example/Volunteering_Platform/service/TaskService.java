@@ -21,6 +21,16 @@ public class TaskService {
     public Optional<Task> getTaskById(Long taskId) {
         return taskRepository.findById(taskId);
     }
+    public Optional<Task> getTaskByName(String title) {
+        return taskRepository.findByTitle(title);
+    }
+    
+    public Optional<Task> getTaskByLocation(String location) {
+        return taskRepository.findByLocation(location);
+    }
+    public Optional<Task> getTaskByCategory(String category) {
+        return taskRepository.findByCategory(category);
+    }
     
     public Task saveTask(Task task) {
         return taskRepository.save(task);
