@@ -21,15 +21,16 @@ public class TaskService {
     public Optional<Task> getTaskById(Long taskId) {
         return taskRepository.findById(taskId);
     }
-    public Optional<Task> getTaskByName(String title) {
-        return taskRepository.findByTitle(title);
+    public List<Task> getTaskByName(String title) {
+        return taskRepository.findByTitleIgnoreCase(title);
     }
     
-    public Optional<Task> getTaskByLocation(String location) {
-        return taskRepository.findByLocation(location);
+    
+    public List<Task> getTaskByLocation(String location) {
+        return taskRepository.findByLocationIgnoreCase(location);
     }
-    public Optional<Task> getTaskByCategory(String category) {
-        return taskRepository.findByCategory(category);
+    public List<Task> getTaskByCategory(String category) {
+        return taskRepository.findByCategoryIgnoreCase(category);
     }
     
     public Task saveTask(Task task) {

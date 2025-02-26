@@ -1,7 +1,5 @@
 package com.example.Volunteering_Platform.controller;
 
-
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 
 import com.example.Volunteering_Platform.model.Task;
 import com.example.Volunteering_Platform.service.TaskService;
@@ -64,34 +61,33 @@ public class TaskController {
     }
 
     @GetMapping("/getTaskByName/{title}")
-    public ResponseEntity<Task> getTaskByName(@PathVariable String title) {
-        Task task = taskService.getTaskByName(title).orElse(null);
-        if (task != null) {
-            return new ResponseEntity<>(task, HttpStatus.OK);
+    public ResponseEntity<List<Task>> getTaskByName(@PathVariable String title) {
+        List<Task> tasks = taskService.getTaskByName(title);
+        if (tasks != null) {
+            return new ResponseEntity<>(tasks, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/getTaskByLocation/{location}")
-    public ResponseEntity<Task> getTaskByLocation(@PathVariable String location) {
-        Task task = taskService.getTaskByLocation(location).orElse(null);
-        if (task != null) {
-            return new ResponseEntity<>(task, HttpStatus.OK);
+    public ResponseEntity<List<Task>> getTaskByLocation(@PathVariable String location) {
+        List<Task> tasks = taskService.getTaskByLocation(location);
+        if (tasks != null) {
+            return new ResponseEntity<>(tasks, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/getTaskByCategory/{category}")
-    public ResponseEntity<Task> getTaskByCategory(@PathVariable String category) {
-        Task task = taskService.getTaskByCategory(category).orElse(null);
-        if (task != null) {
-            return new ResponseEntity<>(task, HttpStatus.OK);
+    public ResponseEntity<List<Task>> getTaskByCategory(@PathVariable String category) {
+        List<Task> tasks = taskService.getTaskByCategory(category);
+        if (tasks != null) {
+            return new ResponseEntity<>(tasks, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
 
 }
