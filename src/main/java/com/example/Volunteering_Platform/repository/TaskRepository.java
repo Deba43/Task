@@ -1,5 +1,6 @@
 package com.example.Volunteering_Platform.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,4 +22,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     
     @Query("SELECT c FROM Task c WHERE LOWER(c.category) = LOWER(:category)")
     List<Task> findByCategoryIgnoreCase(@Param("category")String category);
+
+    List<Task> findByEventDate(LocalDate eventDate);
 }

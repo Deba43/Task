@@ -35,11 +35,8 @@ public class Task {
 
     private LocalDate eventDate;
 
-    private LocalDate createdAt;
+    private LocalDate endDate;
 
-    private LocalDate endAt;
-
-    private LocalDate updatedAt;
 
     // @ManyToOne
     // @JoinColumn(name = "org_id")

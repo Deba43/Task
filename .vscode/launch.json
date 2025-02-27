@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-VolunteeringPlatformApplication<Volunteering-Platform>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.example.Volunteering_Platform.VolunteeringPlatformApplication",
+      "projectName": "Volunteering-Platform",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

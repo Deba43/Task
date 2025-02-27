@@ -1,5 +1,6 @@
 package com.example.Volunteering_Platform.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +32,10 @@ public class TaskService {
     }
     public List<Task> getTaskByCategory(String category) {
         return taskRepository.findByCategoryIgnoreCase(category);
+    }
+
+    public List<Task> getTaskByDate(LocalDate eventDate) {
+        return taskRepository.findByEventDate(eventDate);
     }
     
     public Task saveTask(Task task) {

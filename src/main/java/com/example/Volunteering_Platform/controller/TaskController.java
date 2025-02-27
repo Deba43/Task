@@ -1,5 +1,6 @@
 package com.example.Volunteering_Platform.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,14 +10,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Volunteering_Platform.model.Task;
 import com.example.Volunteering_Platform.service.TaskService;
 
 @RestController
-@RequestMapping("/tasks")
 public class TaskController {
 
     @Autowired
@@ -24,8 +23,8 @@ public class TaskController {
 
     @PostMapping("/addTask")
     public ResponseEntity<Task> addTask(@RequestBody Task task) {
-        if (task.getEndAt() != null && task.getEventDate() != null) {
-            if (task.getEndAt().isBefore(task.getEventDate())) { // Compare directly
+        if (task.getEndDate() != null && task.getEventDate() != null) {
+            if (task.getEndDate().isBefore(task.getEventDate())) { // Compare directly
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         }
@@ -38,7 +37,7 @@ public class TaskController {
         }
     }
 
-    @GetMapping("/getAllTasks")
+    @GetMapping("/viewAllTasks")
     public ResponseEntity<List<Task>> getAllTasks() {
         List<Task> tasks = taskService.getAllTasks();
 
@@ -83,6 +82,16 @@ public class TaskController {
     @GetMapping("/getTaskByCategory/{category}")
     public ResponseEntity<List<Task>> getTaskByCategory(@PathVariable String category) {
         List<Task> tasks = taskService.getTaskByCategory(category);
+        if (tasks != null) {
+            return new ResponseEntity<>(tasks, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/getTaskByDate/{eventDate}")
+    public ResponseEntity<List<Task>> getTaskByDate(@PathVariable LocalDate eventDate) {
+        List<Task> tasks = taskService.getTaskByDate(eventDate);
         if (tasks != null) {
             return new ResponseEntity<>(tasks, HttpStatus.OK);
         } else {
