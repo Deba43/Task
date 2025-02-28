@@ -15,6 +15,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/addTask").permitAll()
                         .requestMatchers("/viewAllTasks").permitAll()
+                        .requestMatchers("/searchTasks").permitAll()
                         .anyRequest().authenticated());
 
         return http.build();

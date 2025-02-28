@@ -42,4 +42,9 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
+    public List<Task> searchTasks(String title, String location, String category, LocalDate eventDate) {
+        return taskRepository.findTasksByFilters(title, location, category, eventDate);
+    }
+    
+
 }
