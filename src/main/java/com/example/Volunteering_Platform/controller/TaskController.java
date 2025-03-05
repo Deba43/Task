@@ -25,8 +25,11 @@ public class TaskController {
 
     @PostMapping("/addTask")
     public ResponseEntity<Task> addTask(@RequestBody Task task) {
+        System.out.println("Received Task: " + task);
+
         if (task.getEndDate() != null && task.getEventDate() != null) {
-            if (task.getEndDate().isBefore(task.getEventDate())) { // Compare directly
+            if (task.getEndDate().isBefore(task.getEventDate())) {
+                System.out.println("End date is before event date");
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         }
@@ -35,6 +38,7 @@ public class TaskController {
             Task savedTask = taskService.saveTask(task);
             return new ResponseEntity<>(savedTask, HttpStatus.CREATED);
         } catch (Exception e) {
+            e.printStackTrace(); // Print error details in logs
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

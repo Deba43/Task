@@ -7,6 +7,7 @@ import com.example.Volunteering_Platform.enums.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Entity
@@ -34,7 +35,7 @@ public class Task {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status; // Enum for pending, in progress, completed
+    private Status status = Status.PENDING; // Enum for pending, in progress, completed
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -44,7 +45,7 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private Category category; // Enum for education, health, environment
 
-    @NotEmpty(message = "Provide value for event date")
+    @NotNull(message = "Provide value for event date")
     @Column(nullable = false)
     @FutureOrPresent(message = "Event start date should be either current or future date")
     private LocalDate eventDate;
