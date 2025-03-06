@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.Volunteering_Platform.dto.TaskDto;
+import com.example.Volunteering_Platform.enums.Status;
 import com.example.Volunteering_Platform.exception.InvalidEntityException;
 import com.example.Volunteering_Platform.model.Task;
 import com.example.Volunteering_Platform.repository.TaskRepository;
@@ -68,6 +69,12 @@ public class TaskService {
         task.setCategory(taskDto.getCategory());
         task.setEventDate(taskDto.getEventDate());
         task.setEndDate(taskDto.getEndDate());
+
+        if (taskDto.getStatus() == null) {
+            task.setStatus(Status.PENDING);
+        } else {
+            task.setStatus(taskDto.getStatus());
+        }
         return taskRepository.save(task);
     }
 
