@@ -93,6 +93,7 @@ public class TaskService {
         task.setTitle(updatedTask.getTitle());
         task.setDescription(updatedTask.getDescription());
         task.setLocation(updatedTask.getLocation());
+        task.setStatus(updatedTask.getStatus());
         task.setPriority(updatedTask.getPriority());
         task.setCategory(updatedTask.getCategory());
         task.setEventDate(updatedTask.getEventDate());
