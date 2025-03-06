@@ -18,8 +18,10 @@ public class SecurityConfig {
                         .requestMatchers("/searchTasks").permitAll()
                         .requestMatchers("/getTaskByName/{title}").permitAll()
                         .requestMatchers("/getTaskByLocation/{location}").permitAll()
+                        .requestMatchers("/getTaskById/{taskId}").permitAll()
                         .requestMatchers("/getTaskByCategory/{category}").permitAll()
                         .requestMatchers("/getTaskByDate/{eventDate}").permitAll()
+                        .requestMatchers("/update/{taskId}").permitAll()
                         .anyRequest().authenticated());
 
         return http.build();
