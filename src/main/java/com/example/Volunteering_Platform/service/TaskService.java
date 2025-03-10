@@ -107,8 +107,26 @@ public class TaskService {
     }
 
     public Task updateTask(Long taskId, Task updatedTask) {
-
         Task task = getTaskById(taskId);
+
+        if (updatedTask.getTitle() == null || updatedTask.getTitle().isEmpty()) {
+            throw new InvalidEntityException("Title cannot be blank");
+        }
+        if (updatedTask.getDescription() == null || updatedTask.getDescription().isEmpty()) {
+            throw new InvalidEntityException("Description cannot be blank");
+        }
+        if (updatedTask.getLocation() == null || updatedTask.getLocation().isEmpty()) {
+            throw new InvalidEntityException("Location cannot be blank");
+        }
+        if (updatedTask.getPriority() == null) {
+            throw new InvalidEntityException("Priority must be set");
+        }
+        if (updatedTask.getCategory() == null) {
+            throw new InvalidEntityException("Category cannot be blank");
+        }
+        if (updatedTask.getEventDate() == null) {
+            throw new InvalidEntityException("Event date is required");
+        }
 
         task.setTitle(updatedTask.getTitle());
         task.setDescription(updatedTask.getDescription());
@@ -121,4 +139,5 @@ public class TaskService {
 
         return taskRepository.save(task);
     }
+
 }
