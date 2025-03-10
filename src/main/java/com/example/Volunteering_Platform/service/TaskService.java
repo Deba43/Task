@@ -61,6 +61,25 @@ public class TaskService {
     }
 
     public Task saveTask(TaskDto taskDto) {
+        if (taskDto.getTitle() == null || taskDto.getTitle().isEmpty()) {
+            throw new InvalidEntityException("Title cannot be blank");
+        }
+        if (taskDto.getDescription() == null || taskDto.getDescription().isEmpty()) {
+            throw new InvalidEntityException("Description cannot be blank");
+        }
+        if (taskDto.getLocation() == null || taskDto.getLocation().isEmpty()) {
+            throw new InvalidEntityException("Location cannot be blank");
+        }
+        if (taskDto.getPriority() == null) {
+            throw new InvalidEntityException("Priority must be set");
+        }
+        if (taskDto.getCategory() == null) {
+            throw new InvalidEntityException("Category cannot be blank");
+        }
+        if (taskDto.getEventDate() == null) {
+            throw new InvalidEntityException("Event date is required");
+        }
+
         Task task = new Task();
         task.setTitle(taskDto.getTitle());
         task.setDescription(taskDto.getDescription());
@@ -75,6 +94,7 @@ public class TaskService {
         } else {
             task.setStatus(taskDto.getStatus());
         }
+
         return taskRepository.save(task);
     }
 
@@ -87,7 +107,7 @@ public class TaskService {
     }
 
     public Task updateTask(Long taskId, Task updatedTask) {
-        
+
         Task task = getTaskById(taskId);
 
         task.setTitle(updatedTask.getTitle());
