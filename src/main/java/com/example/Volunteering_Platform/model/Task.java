@@ -35,14 +35,17 @@ public class Task {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @NotNull(message = "Provide value for status")
     private Status status = Status.PENDING; // Enum for pending, in progress, completed
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Provide value for priority")
     private Priority priority; // Enum for low, medium, high
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Provide value for category")
     private Category category; // Enum for education, health, environment
 
     @NotNull(message = "Provide value for event date")
@@ -54,9 +57,9 @@ public class Task {
     @FutureOrPresent(message = "Event End date should be either current or future date")
     private LocalDate endDate;
 
-    // @ManyToOne
-    // @JoinColumn(name = "org_id")
-    // private Organization org;
+    @ManyToOne
+    @JoinColumn(name = "org_id")
+    private Organization org;
 
     @PrePersist
     @PreUpdate

@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import com.example.Volunteering_Platform.dto.TaskDto;
 import com.example.Volunteering_Platform.enums.Status;
 import com.example.Volunteering_Platform.exception.InvalidEntityException;
+import com.example.Volunteering_Platform.model.Organization;
 import com.example.Volunteering_Platform.model.Task;
+import com.example.Volunteering_Platform.repository.OrganizationRepository;
 import com.example.Volunteering_Platform.repository.TaskRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,10 @@ public class TaskService {
 
     @Autowired
     private TaskRepository taskRepository;
+    @Autowired
+    OrganizationRepository organizationRepository;
+    @Autowired
+    EmailService emailService;
 
     public List<Task> getAllTasks() {
         return taskRepository.findAll();
@@ -60,7 +66,7 @@ public class TaskService {
         return tasks;
     }
 
-    public Task saveTask(TaskDto taskDto) {
+    public Task saveTask(Long org_id, TaskDto taskDto) {
         if (taskDto.getTitle() == null || taskDto.getTitle().isEmpty()) {
             throw new InvalidEntityException("Title cannot be blank");
         }
@@ -80,6 +86,9 @@ public class TaskService {
             throw new InvalidEntityException("Event date is required");
         }
 
+        Organization organization = organizationRepository.findById(org_id)
+                .orElseThrow(() -> new InvalidEntityException("Organization with ID " + org_id + " not found"));
+
         Task task = new Task();
         task.setTitle(taskDto.getTitle());
         task.setDescription(taskDto.getDescription());
@@ -95,7 +104,33 @@ public class TaskService {
             task.setStatus(taskDto.getStatus());
         }
 
-        return taskRepository.save(task);
+        task.setOrg(organization);
+
+        Task savedTask = taskRepository.save(task);
+        sendTaskSave(savedTask, organization.getEmail());
+
+        return savedTask;
+    }
+
+    public String sendTaskSave(Task task, String orgEmail) {
+        String subject = "New Task Created: " + task.getTitle();
+        String message = "Your task has been successfully created.\n\n"
+                + "Title: " + task.getTitle() + "\n"
+                + "Description: " + task.getDescription() + "\n"
+                + "Location: " + task.getLocation() + "\n"
+                + "Priority: " + task.getPriority() + "\n"
+                + "Category: " + task.getCategory() + "\n"
+                + "Status: " + task.getStatus() + "\n"
+                + "Event Date: " + task.getEventDate() + "\n"
+                + "End Date: " + task.getEndDate() + "\n";
+
+        try {
+            emailService.sendEmail(orgEmail, subject, message);
+            return "Email sent successfully to " + orgEmail;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Failed to send email to " + orgEmail;
+        }
     }
 
     public List<Task> searchTasks(String title, String location, String category, LocalDate eventDate) {
@@ -106,7 +141,7 @@ public class TaskService {
         return tasks;
     }
 
-    public Task updateTask(Long taskId, Task updatedTask) {
+    public Task updateTask(Long taskId, Long org_id, Task updatedTask) {
         Task task = getTaskById(taskId);
 
         if (updatedTask.getTitle() == null || updatedTask.getTitle().isEmpty()) {
@@ -128,6 +163,9 @@ public class TaskService {
             throw new InvalidEntityException("Event date is required");
         }
 
+        Organization organization = organizationRepository.findById(org_id)
+                .orElseThrow(() -> new InvalidEntityException("Organization with ID " + org_id + " not found"));
+
         task.setTitle(updatedTask.getTitle());
         task.setDescription(updatedTask.getDescription());
         task.setLocation(updatedTask.getLocation());
@@ -137,7 +175,34 @@ public class TaskService {
         task.setEventDate(updatedTask.getEventDate());
         task.setEndDate(updatedTask.getEndDate());
 
-        return taskRepository.save(task);
+        task.setOrg(organization);
+
+        Task savedTask = taskRepository.save(task);
+        sendUpdateTaskSave(savedTask, organization.getEmail());
+
+        return savedTask;
+
+    }
+
+    public String sendUpdateTaskSave(Task task, String orgEmail) {
+        String subject = "New Task Created: " + task.getTitle();
+        String message = "Your task has been successfully updated.\n\n"
+                + "Title: " + task.getTitle() + "\n"
+                + "Description: " + task.getDescription() + "\n"
+                + "Location: " + task.getLocation() + "\n"
+                + "Priority: " + task.getPriority() + "\n"
+                + "Category: " + task.getCategory() + "\n"
+                + "Status: " + task.getStatus() + "\n"
+                + "Event Date: " + task.getEventDate() + "\n"
+                + "End Date: " + task.getEndDate() + "\n";
+
+        try {
+            emailService.sendEmail(orgEmail, subject, message);
+            return "Email sent successfully to " + orgEmail;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Failed to send email to " + orgEmail;
+        }
     }
 
 }

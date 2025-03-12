@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Volunteering_Platform.dto.TaskDto;
 import com.example.Volunteering_Platform.model.Task;
+import com.example.Volunteering_Platform.service.OrganizationService;
 import com.example.Volunteering_Platform.service.TaskService;
 
 import jakarta.validation.Valid;
@@ -26,10 +27,18 @@ public class TaskController {
 
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private OrganizationService organizationService;
 
-    @PostMapping("/addTask")
-    public ResponseEntity<Task> addTask(@Valid @RequestBody TaskDto taskDto) {
+    @PostMapping("/Organization/{org_id}/addTask")
+    public ResponseEntity<Task> addTask(@PathVariable Long org_id, @Valid @RequestBody TaskDto taskDto) {
         System.out.println("Received Task: " + taskDto);
+
+        boolean organizationExists = organizationService.existsById(org_id);
+        if (!organizationExists) {
+            System.out.println("Organization with ID " + org_id + " does not exist.");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
         if (taskDto.getEndDate() != null && taskDto.getEventDate() != null) {
             if (taskDto.getEndDate().isBefore(taskDto.getEventDate())) {
@@ -39,10 +48,10 @@ public class TaskController {
         }
 
         try {
-            Task savedTask = taskService.saveTask(taskDto);
+            Task savedTask = taskService.saveTask(org_id, taskDto); // Pass org_id for association
             return new ResponseEntity<>(savedTask, HttpStatus.CREATED);
         } catch (Exception e) {
-            e.printStackTrace(); // Print error details in logs
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -124,9 +133,9 @@ public class TaskController {
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
-    @PutMapping("/update/{taskId}")
-    public ResponseEntity<Task> updateTask(@PathVariable Long taskId, @RequestBody Task updatedTask) {
-        Task task = taskService.updateTask(taskId, updatedTask);
+    @PutMapping("/Organization/{org_id}/update/{taskId}")
+    public ResponseEntity<Task> updateTask(@PathVariable Long taskId, @PathVariable Long org_id, @RequestBody Task updatedTask) {
+        Task task = taskService.updateTask(taskId, org_id, updatedTask);
         return ResponseEntity.ok(task);
     }
 

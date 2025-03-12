@@ -14,6 +14,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/addTask").permitAll()
+                        .requestMatchers("/Organizations/**").permitAll()
+                        .requestMatchers("/Organization/{org_id}/addTask").permitAll()
                         .requestMatchers("/viewAllTasks").permitAll()
                         .requestMatchers("/searchTasks").permitAll()
                         .requestMatchers("/getTaskByName/{title}").permitAll()
@@ -21,7 +23,7 @@ public class SecurityConfig {
                         .requestMatchers("/getTaskById/{taskId}").permitAll()
                         .requestMatchers("/getTaskByCategory/{category}").permitAll()
                         .requestMatchers("/getTaskByDate/{eventDate}").permitAll()
-                        .requestMatchers("/update/{taskId}").permitAll()
+                        .requestMatchers("/Organization/{org_id}/update/{taskId}").permitAll()
                         .anyRequest().authenticated());
 
         return http.build();

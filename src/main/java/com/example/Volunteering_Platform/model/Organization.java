@@ -7,28 +7,24 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Entity
-@Table(name = "organization", 
-       uniqueConstraints = {
-           @UniqueConstraint(columnNames = "email"),
-           @UniqueConstraint(columnNames = "phoneNumber"),
-           @UniqueConstraint(columnNames = "website")
-       })
+@Table(name = "organization", uniqueConstraints = {
+        @UniqueConstraint(columnNames = { "email", "phoneNumber" })
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Organization {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotEmpty(message = "Provide value for name")
-    @Column(length=50)
+    @Column(length = 50)
     private String name;
 
     @NotEmpty(message = "Provide value for website")
-    @Pattern(regexp = "^(http(s)?://)?(www\\.)?[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+(/.*)?$", 
-             message = "Invalid website URL format")
+    @Pattern(regexp = "^(http(s)?://)?(www\\.)?[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+(/.*)?$", message = "Invalid website URL format")
     @Column(nullable = false)
     private String website;
 
@@ -46,10 +42,5 @@ public class Organization {
     @Column(nullable = false, unique = true)
     private String phoneNumber;
 
-    @NotEmpty(message = "Provide value for password")
-    @Size(min = 8, message = "Your Password must be at least 8 character long")
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{6,}$", message = "Password must contain at least one letter, one number, and one special character")
-    @Column(nullable = false)
-    private String password;
-    
+
 }
